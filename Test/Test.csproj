@@ -51,9 +51,11 @@
     <Compile Include="Controller\Program.cs" />
     <Compile Include="Controller\Morning Game.cs" />
     <Compile Include="View\Animation.cs" />
-    <Compile Include="Model\LazerGun.cs" />
     <Compile Include="View\parallaxingbackground.cs" />
     <Compile Include="Model\Enemy.cs" />
+    <Compile Include="Model\Projectile.cs" />
+    <Compile Include="Model\Plasma.cs" />
+    <Compile Include="Model\Missile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

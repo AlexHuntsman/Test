@@ -46,10 +46,24 @@ namespace Test.Controller
 		// A random number generator
 		Random random;
 
-		private TimeSpan lazerFireTime;
-		private TimeSpan previousLazerTime;
-		//private List<BoomBoxWeapon> boomBoxes;
-		private Texture2D boomBoxTexture;
+		Texture2D projectileTexture;
+		List<Projectile> projectiles;
+
+		// The rate of fire of the player laser
+		TimeSpan fireTime;
+		TimeSpan previousFireTime;
+
+		TimeSpan plasmaFireTime;
+		TimeSpan previousPlasmaTime;
+		List<Plasma> fireballs;
+
+		Texture2D plasmaTexture;
+
+		TimeSpan missileFireTime;
+		TimeSpan previousMisileTime;
+		List<Missile> Missiles;
+
+		Texture2D missileTexture;
 
 		public MorningGame ()
 		{
@@ -82,6 +96,22 @@ namespace Test.Controller
 			// Initialize our random number generator
 			random = new Random();
 
+			projectiles = new List<Projectile>();
+
+			// Set the laser to fire every quarter second
+			fireTime = TimeSpan.FromSeconds(.15f);
+
+			fireballs = new List<Plasma>();
+
+			// Set the laser to fire every half second
+			plasmaFireTime = TimeSpan.FromSeconds(.25f);
+
+			Missiles = new List<Missile>();
+
+			// Set the laser to fire every second
+			missileFireTime = TimeSpan.FromSeconds(.5f);
+
+
 
 			base.Initialize ();
 		}
@@ -104,10 +134,20 @@ namespace Test.Controller
 				+ GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
 			player.Initialize(playerAnimation, playerPosition);
 
+			Animation plasmaAnimation = new Animation();
+			Animation missileAnimation = new Animation();
+
 			bgLayer1.Initialize(Content, "Texture/bgLayer1", GraphicsDevice.Viewport.Width, -1);
 			bgLayer2.Initialize(Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
 			enemyTexture = Content.Load<Texture2D>("Animation/mineAnimation");
 			mainBackground = Content.Load<Texture2D>("Texture/mainbackground");
+			projectileTexture = Content.Load<Texture2D>("Texture/laser");
+
+			 plasmaTexture = Content.Load<Texture2D>("Animation/Plasma");
+			 missileTexture = Content.Load<Texture2D> ("Animation/Missile");
+
+			plasmaAnimation.Initialize(plasmaTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
+			missileAnimation.Initialize(missileTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
 		}
 		private void UpdatePlayer(GameTime gameTime)
 		{
@@ -139,11 +179,52 @@ namespace Test.Controller
 			{
 				player.Position.Y += playerMoveSpeed;
 			}
+			if (currentKeyboardState.IsKeyDown(Keys.Q))
+			{
+				// Fire only every interval we set as the fireTime
+				if (gameTime.TotalGameTime - previousFireTime > fireTime)
+				{
+					// Reset our current time
+					previousFireTime = gameTime.TotalGameTime;
+
+					// Add the projectile, but add it to the front and center of the player
+					AddProjectile(player.Position + new Vector2(player.Width / 2, 0));
+				}
+			}
+			if (currentKeyboardState.IsKeyDown(Keys.W))
+			{
+				// Fire only every interval we set as the fireTime
+				if (gameTime.TotalGameTime - previousPlasmaTime > plasmaFireTime)
+				{
+					// Reset our current time
+					previousPlasmaTime = gameTime.TotalGameTime;
+
+					// Add the projectile, but add it to the front and center of the player
+					AddPlasma(player.Position + new Vector2(player.Width / 2, 0));
+				}
+			}
+			if (currentKeyboardState.IsKeyDown(Keys.E))
+			{
+				// Fire only every interval we set as the fireTime
+				if (gameTime.TotalGameTime - previousMisileTime > missileFireTime)
+				{
+					// Reset our current time
+					previousMisileTime = gameTime.TotalGameTime;
+
+					// Add the projectile, but add it to the front and center of the player
+					AddMissile(player.Position + new Vector2(player.Width / 2, 0));
+				}
+			}
 
 			// Make sure that the player does not go out of bounds
 			player.Position.X = MathHelper.Clamp(player.Position.X, player.Width/2,GraphicsDevice.Viewport.Width - player.Width);
 			player.Position.Y = MathHelper.Clamp(player.Position.Y, player.Width/2,GraphicsDevice.Viewport.Height - player.Height);
+
+
+
+
 		}
+
 		private void AddEnemy()
 		{ 
 			// Create the animation object
@@ -163,6 +244,30 @@ namespace Test.Controller
 
 			// Add the enemy to the active enemies list
 			enemies.Add(enemy);
+		}
+
+		private void AddProjectile(Vector2 position)
+		{
+			Projectile projectile = new Projectile(); 
+			projectile.Initialize(GraphicsDevice.Viewport, projectileTexture,position); 
+			projectiles.Add(projectile);
+		}
+
+		private void AddPlasma(Vector2 position)
+		{
+			Plasma plasma = new Plasma(); 
+			Animation plasmaAnimation = new Animation ();
+			plasmaAnimation.Initialize(plasmaTexture, Vector2.Zero, 47, 61, 8, 30,Color.White, 1f, true);
+			plasma.Initialize(GraphicsDevice.Viewport, plasmaTexture,position); 
+			fireballs.Add(plasma);
+		}
+
+		private void AddMissile(Vector2 position)
+		{
+			Missile missile = new Missile();
+			Animation missileAnimation = new Animation ();
+			missile.Initialize(GraphicsDevice.Viewport, missileTexture,position); 
+			Missiles.Add(missile);
 		}
 
 		private void UpdateEnemies(GameTime gameTime)
@@ -187,9 +292,50 @@ namespace Test.Controller
 				} 
 			}
 		}
-		//pirvate void AddLazerGun
-		//{
-		//}
+
+		private void UpdateProjectiles()
+		{
+			// Update the Projectiles
+			for (int i = projectiles.Count - 1; i >= 0; i--) 
+			{
+				projectiles[i].Update();
+
+				if (projectiles[i].Active == false)
+				{
+					projectiles.RemoveAt(i);
+				} 
+			}
+		}
+
+		private void UpdatePlasma(GameTime gameTime)
+		{
+			// Update the Projectiles
+			for (int i = fireballs.Count - 1; i >= 0; i--) 
+			{
+				fireballs[i].Update(gameTime);
+
+				if (fireballs[i].Active == false)
+				{
+					fireballs.RemoveAt(i);
+				} 
+			}
+		}
+
+		private void UpdateMissiles(GameTime gameTime)
+		{
+			// Update the Projectiles
+			for (int i = Missiles.Count - 1; i >= 0; i--) 
+			{
+				Missiles[i].Update(gameTime);
+
+				if (Missiles[i].Active == false)
+				{
+					Missiles.RemoveAt(i);
+				} 
+			}
+		}
+
+
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
@@ -220,7 +366,120 @@ namespace Test.Controller
 			bgLayer2.Update();
 			// Update the enemies
 			UpdateEnemies(gameTime);
+			// Update the collision
+			UpdateCollision();
+			// Update the projectiles
+			UpdateProjectiles();
+			UpdateMissiles (gameTime);
+			UpdatePlasma (gameTime);
+			
 			base.Update (gameTime);
+		}
+		private void UpdateCollision()
+		{
+			// Use the Rectangle's built-in intersect function to 
+			// determine if two objects are overlapping
+			Rectangle rectangle1;
+			Rectangle rectangle2;
+
+			// Only create the rectangle once for the player
+			rectangle1 = new Rectangle((int)player.Position.X,
+				(int)player.Position.Y,
+				player.Width,
+				player.Height);
+
+			// Do the collision between the player and the enemies
+			for (int i = 0; i <enemies.Count; i++)
+			{
+				rectangle2 = new Rectangle((int)enemies[i].Position.X,
+					(int)enemies[i].Position.Y,
+					enemies[i].Width,
+					enemies[i].Height);
+
+				// Determine if the two objects collided with each
+				// other
+				if(rectangle1.Intersects(rectangle2))
+				{
+					// Subtract the health from the player based on
+					// the enemy damage
+					player.Health -= enemies[i].Damage;
+
+					// Since the enemy collided with the player
+					// destroy it
+					enemies[i].Health = 0;
+
+					// If the player health is less than zero we died
+					if (player.Health <= 0)
+						player.Active = false; 
+
+
+				}
+
+			}
+			// Projectile vs Enemy Collision
+			for (int i = 0; i < projectiles.Count; i++)
+			{
+				for (int j = 0; j < enemies.Count; j++)
+				{
+					// Create the rectangles we need to determine if we collided with each other
+					rectangle1 = new Rectangle((int)projectiles[i].Position.X - 
+						projectiles[i].Width / 2,(int)projectiles[i].Position.Y - 
+						projectiles[i].Height / 2,projectiles[i].Width, projectiles[i].Height);
+
+					rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
+						(int)enemies[j].Position.Y - enemies[j].Height / 2,
+						enemies[j].Width, enemies[j].Height);
+
+					// Determine if the two objects collided with each other
+					if (rectangle1.Intersects(rectangle2))
+					{
+						enemies[j].Health -= projectiles[i].Damage;
+						projectiles[i].Active = false;
+					}
+				}
+			}
+			for (int i = 0; i < fireballs.Count; i++)
+			{
+				for (int j = 0; j < enemies.Count; j++)
+				{
+					// Create the rectangles we need to determine if we collided with each other
+					rectangle1 = new Rectangle((int)fireballs[i].Position.X - 
+						fireballs[i].Width / 2,(int)fireballs[i].Position.Y - 
+						fireballs[i].Height / 2,fireballs[i].Width, fireballs[i].Height);
+
+					rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
+						(int)enemies[j].Position.Y - enemies[j].Height / 2,
+						enemies[j].Width, enemies[j].Height);
+
+					// Determine if the two objects collided with each other
+					if (rectangle1.Intersects(rectangle2))
+					{
+						enemies[j].Health -= fireballs[i].Damage;
+						fireballs[i].Active = false;
+					}
+				}
+			}
+			for (int i = 0; i < Missiles.Count; i++)
+			{
+				for (int j = 0; j < enemies.Count; j++)
+				{
+					// Create the rectangles we need to determine if we collided with each other
+					rectangle1 = new Rectangle((int)Missiles[i].Position.X - 
+						Missiles[i].Width / 2,(int)Missiles[i].Position.Y - 
+						Missiles[i].Height / 2,Missiles[i].Width, Missiles[i].Height);
+
+					rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
+						(int)enemies[j].Position.Y - enemies[j].Height / 2,
+						enemies[j].Width, enemies[j].Height);
+
+					// Determine if the two objects collided with each other
+					if (rectangle1.Intersects(rectangle2))
+					{
+						enemies[j].Health -= Missiles[i].Damage;
+						Missiles[i].Active = false;
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -243,6 +502,22 @@ namespace Test.Controller
 			for (int i = 0; i < enemies.Count; i++)
 			{
 				enemies[i].Draw(spriteBatch);
+			}
+
+			// Draw the Projectiles
+			for (int i = 0; i < projectiles.Count; i++)
+			{
+				projectiles[i].Draw(spriteBatch);
+			}
+
+			for (int i = 0; i < fireballs.Count; i++)
+			{
+				fireballs[i].Draw(spriteBatch);
+			}
+
+			for (int i = 0; i < Missiles.Count; i++)
+			{
+				Missiles[i].Draw(spriteBatch);
 			}
 
 			// Draw the Player
