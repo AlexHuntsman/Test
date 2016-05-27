@@ -23,11 +23,11 @@ namespace Test.Controller
 	static class Program
     #endif
     {
-		private static Game1 game;
+		private static MorningGame game;
 
 		internal static void RunGame ()
 		{
-			game = new Game1 ();
+			game = new MorningGame ();
 			game.Run ();
 			#if !__IOS__  && !__TVOS__
 			game.Dispose ();
