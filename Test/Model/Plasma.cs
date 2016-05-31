@@ -18,8 +18,11 @@ namespace Test.Model
 		// The amount of damage the projectile can inflict to an enemy
 		public int Damage;
 
+		public Texture2D plasmaTexture;
+
 		// Represents the viewable boundary of the game
 		Viewport viewport;
+
 
 		// Get the width of the projectile ship
 		public int Width
@@ -37,6 +40,16 @@ namespace Test.Model
 		float projectileMoveSpeed;
 
 
+		public void Initialize(Texture2D texture, Vector2 position)
+		{
+
+			Active = true;
+			this.Damage = 5;
+
+			this.plasmaTexture = texture;
+			this.Position = position;
+
+		}
 		public void Initialize(Viewport viewport, Animation animation, Vector2 position)
 		{
 			PlasmaAnimation = animation;

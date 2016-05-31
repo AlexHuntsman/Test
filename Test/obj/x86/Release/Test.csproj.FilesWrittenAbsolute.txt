@@ -28,3 +28,5 @@
 /Users/ahun0442/Projects/Test/Test/bin/Release/Test.exe
 /Users/ahun0442/Projects/Test/Test/obj/x86/Release/Test.exe
 /Users/ahun0442/Projects/Test/Test/obj/x86/Release/Test.exe.mdb
+/Users/ahun0442/Projects/Test/Test/bin/Release/Content/Texture/MissileTexture.xnb
+/Users/ahun0442/Projects/Test/Test/bin/Release/Content/Texture/PlasmaTexture.xnb

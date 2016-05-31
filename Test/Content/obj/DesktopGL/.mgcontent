@@ -22,5 +22,7 @@
     <File>/Users/ahun0442/Projects/Test/Test/Content/Texture/player.png</File>
     <File>/Users/ahun0442/Projects/Test/Test/Content/Animation/Missile.png</File>
     <File>/Users/ahun0442/Projects/Test/Test/Content/Animation/Plasma.png</File>
+    <File>/Users/ahun0442/Projects/Test/Test/Content/Texture/MissileTexture.png</File>
+    <File>/Users/ahun0442/Projects/Test/Test/Content/Texture/PlasmaTexture.png</File>
   </SourceFiles>
 </SourceFileCollection>

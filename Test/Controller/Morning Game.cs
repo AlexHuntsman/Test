@@ -258,7 +258,7 @@ namespace Test.Controller
 			Plasma plasma = new Plasma(); 
 			Animation plasmaAnimation = new Animation ();
 			plasmaAnimation.Initialize(plasmaTexture, Vector2.Zero, 47, 61, 8, 30,Color.White, 1f, true);
-			plasma.Initialize(GraphicsDevice.Viewport, plasmaTexture,position); 
+			plasma.Initialize(GraphicsDevice.Viewport, plasmaAnimation,position); 
 			fireballs.Add(plasma);
 		}
 
@@ -266,7 +266,8 @@ namespace Test.Controller
 		{
 			Missile missile = new Missile();
 			Animation missileAnimation = new Animation ();
-			missile.Initialize(GraphicsDevice.Viewport, missileTexture,position); 
+			missileAnimation.Initialize (missileTexture, Vector2.Zero, 47, 61, 8, 30, Color.White, 1f, true);
+			missile.Initialize(GraphicsDevice.Viewport, missileAnimation,position); 
 			Missiles.Add(missile);
 		}
 
