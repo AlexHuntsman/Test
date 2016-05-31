@@ -18,7 +18,7 @@ namespace Test.Model
 		public int Damage;
 
 		// Represents the viewable boundary of the game
-		Viewport viewport;
+		Viewport Viewport;
 
 		// Get the width of the projectile ship
 		public int Width
@@ -40,7 +40,7 @@ namespace Test.Model
 		{
 			Texture = texture;
 			Position = position;
-			this.viewport = viewport;
+			this.Viewport = viewport;
 
 			Active = true;
 
@@ -54,7 +54,7 @@ namespace Test.Model
 			Position.X += projectileMoveSpeed;
 
 			// Deactivate the bullet if it goes out of screen
-			if (Position.X + Texture.Width / 2 > viewport.Width)
+			if (Position.X + Texture.Width / 2 > Viewport.Width)
 				Active = false;
 		}
 		public void Draw(SpriteBatch spriteBatch)

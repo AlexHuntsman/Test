@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Test.View; 
 
+
 namespace Test.Model
 {
 	public class Player
@@ -43,7 +44,6 @@ namespace Test.Model
 			set{ health = value; }
 		}
 
-		// Get the width of the player ship
 		// Get the width of the player ship
 		public int Width
 		{

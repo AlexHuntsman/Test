@@ -134,8 +134,8 @@ namespace Test.Controller
 				+ GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
 			player.Initialize(playerAnimation, playerPosition);
 
-			Animation plasmaAnimation = new Animation();
-			Animation missileAnimation = new Animation();
+//			Animation plasmaAnimation = new Animation();
+//			Animation missileAnimation = new Animation();
 
 			bgLayer1.Initialize(Content, "Texture/bgLayer1", GraphicsDevice.Viewport.Width, -1);
 			bgLayer2.Initialize(Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
@@ -146,8 +146,8 @@ namespace Test.Controller
 			 plasmaTexture = Content.Load<Texture2D>("Animation/Plasma");
 			 missileTexture = Content.Load<Texture2D> ("Animation/Missile");
 
-			plasmaAnimation.Initialize(plasmaTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
-			missileAnimation.Initialize(missileTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
+//			plasmaAnimation.Initialize(plasmaTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
+//			missileAnimation.Initialize(missileTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
 		}
 		private void UpdatePlayer(GameTime gameTime)
 		{
@@ -196,13 +196,13 @@ namespace Test.Controller
 				// Fire only every interval we set as the fireTime
 				if (gameTime.TotalGameTime - previousPlasmaTime > plasmaFireTime)
 				{
-					// Reset our current time
+				// Reset our current time
 					previousPlasmaTime = gameTime.TotalGameTime;
 
 					// Add the projectile, but add it to the front and center of the player
 					AddPlasma(player.Position + new Vector2(player.Width / 2, 0));
 				}
-			}
+		}
 			if (currentKeyboardState.IsKeyDown(Keys.E))
 			{
 				// Fire only every interval we set as the fireTime
@@ -257,8 +257,8 @@ namespace Test.Controller
 		{
 			Plasma plasma = new Plasma(); 
 			Animation plasmaAnimation = new Animation ();
-			plasmaAnimation.Initialize(plasmaTexture, Vector2.Zero, 47, 61, 8, 30,Color.White, 1f, true);
-			plasma.Initialize(GraphicsDevice.Viewport, plasmaAnimation,position); 
+			plasmaAnimation.Initialize(plasmaTexture, position, 32, 32, 6, 30,Color.White, 1f, true);
+			plasma.InitializeAnimation(GraphicsDevice.Viewport, plasmaAnimation, position); 
 			fireballs.Add(plasma);
 		}
 
@@ -266,7 +266,7 @@ namespace Test.Controller
 		{
 			Missile missile = new Missile();
 			Animation missileAnimation = new Animation ();
-			missileAnimation.Initialize (missileTexture, Vector2.Zero, 47, 61, 8, 30, Color.White, 1f, true);
+			missileAnimation.Initialize (missileTexture, position, 32, 32, 6, 30, Color.White, 1f, true);
 			missile.Initialize(GraphicsDevice.Viewport, missileAnimation,position); 
 			Missiles.Add(missile);
 		}
@@ -305,6 +305,7 @@ namespace Test.Controller
 				{
 					projectiles.RemoveAt(i);
 				} 
+
 			}
 		}
 
@@ -319,6 +320,7 @@ namespace Test.Controller
 				{
 					fireballs.RemoveAt(i);
 				} 
+
 			}
 		}
 
@@ -333,6 +335,7 @@ namespace Test.Controller
 				{
 					Missiles.RemoveAt(i);
 				} 
+
 			}
 		}
 
@@ -444,8 +447,8 @@ namespace Test.Controller
 				for (int j = 0; j < enemies.Count; j++)
 				{
 					// Create the rectangles we need to determine if we collided with each other
-					rectangle1 = new Rectangle((int)fireballs[i].Position.X - 
-						fireballs[i].Width / 2,(int)fireballs[i].Position.Y - 
+					rectangle1 = new Rectangle((int)fireballs[i].position.X - 
+						fireballs[i].Width / 2,(int)fireballs[i].position.Y - 
 						fireballs[i].Height / 2,fireballs[i].Width, fireballs[i].Height);
 
 					rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
